@@ -56,9 +56,6 @@
     firstRunTarget: document.getElementById("first-run-target"),
     dashboard: document.getElementById("dashboard"),
     daysNumber: document.getElementById("days-number"),
-    tickH: document.getElementById("tick-h"),
-    tickM: document.getElementById("tick-m"),
-    tickS: document.getElementById("tick-s"),
     percentValue: document.getElementById("percent-value"),
     progressFill: document.getElementById("progress-fill"),
     statMeta: document.getElementById("stat-meta"),
@@ -171,23 +168,14 @@
       Math.round((targetMid - todayMid) / MS_DAY)
     );
 
-    // Live H:M:S until end of the target day
-    const msLeft = Math.max(0, targetEnd - now);
-    const totalSeconds = Math.floor(msLeft / 1000);
-    const hoursLeft = Math.floor((totalSeconds % (24 * 3600)) / 3600);
-    const minutesLeft = Math.floor((totalSeconds % 3600) / 60);
-    const secondsLeft = totalSeconds % 60;
-
     el.daysNumber.textContent = daysRemaining.toLocaleString();
-    el.tickH.textContent = pad(hoursLeft);
-    el.tickM.textContent = pad(minutesLeft);
-    el.tickS.textContent = pad(secondsLeft);
 
-    // Percentage passed
+    // Percentage passed — whole number floor
     const totalSpan = Math.max(1, targetEnd - start);
     const elapsed = Math.min(totalSpan, Math.max(0, now - start));
     const pct = (elapsed / totalSpan) * 100;
-    el.percentValue.textContent = `${pct.toFixed(2)}%`;
+    const pctFloor = Math.floor(pct);
+    el.percentValue.textContent = `${pctFloor}%`;
     el.progressFill.style.width = `${Math.min(100, pct)}%`;
 
     // Label
@@ -195,13 +183,14 @@
     el.heroTarget.textContent = label;
     el.heroEyebrow.textContent =
       now >= targetEnd ? "The horizon has arrived" : "Days remaining until";
-    el.statMeta.textContent = `From ${formatShort(start)} → ${formatShort(target)}`;
+    el.statMeta.textContent = `${pctFloor}% elapsed · ${formatShort(start)} → ${formatShort(target)}`;
   }
 
   function startTicker() {
     if (tickerInterval) clearInterval(tickerInterval);
     renderCountdown();
-    tickerInterval = setInterval(renderCountdown, 1000);
+    // Refresh once per minute — days & % change slowly, no need to tick every second
+    tickerInterval = setInterval(renderCountdown, 60_000);
   }
 
   // ---------- Actions ----------

@@ -8,19 +8,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap"
     />
     <link rel="stylesheet" href="newtab.css" />
   </head>
   <body>
-    <!-- Ambient background: drifting orb + film grain -->
-    <div class="ambient" aria-hidden="true">
-      <div class="orb orb-1"></div>
-      <div class="orb orb-2"></div>
-      <div class="grain"></div>
-      <div class="vignette"></div>
-    </div>
-
     <main id="app" class="app" data-testid="app-root">
       <!-- Loading state -->
       <div id="loading" class="loading" data-testid="loading-state">
@@ -97,58 +89,34 @@
           </button>
         </header>
 
-        <div class="content-grid">
-          <!-- Hero section (col-span-8) -->
-          <div class="hero">
-            <p class="hero-eyebrow" id="hero-eyebrow">Days remaining until</p>
-            <p class="hero-target" id="hero-target" data-testid="target-label">—</p>
-            <h1 class="hero-number" id="days-number" data-testid="days-remaining">
-              0
-            </h1>
-            <div class="ticker" id="ticker" data-testid="ticker">
-              <span id="tick-h">00</span>
-              <span class="tick-sep">:</span>
-              <span id="tick-m">00</span>
-              <span class="tick-sep">:</span>
-              <span id="tick-s">00</span>
+        <div class="content-center">
+          <p class="hero-eyebrow" id="hero-eyebrow">Days remaining until</p>
+          <p class="hero-target" id="hero-target" data-testid="target-label">—</p>
+          <h1 class="hero-number" id="days-number" data-testid="days-remaining">
+            0
+          </h1>
+
+          <div class="stat-block">
+            <p class="stat-value" id="percent-value" data-testid="percent-value">
+              0%
+            </p>
+            <div class="progress" aria-hidden="true">
+              <div
+                class="progress-fill"
+                id="progress-fill"
+                data-testid="progress-fill"
+              ></div>
             </div>
+            <p class="stat-meta" id="stat-meta" data-testid="stat-meta">
+              Elapsed · From — to —
+            </p>
           </div>
 
-          <!-- Stats + quote (col-span-4) -->
-          <aside class="stats">
-            <div class="stat-block">
-              <p class="stat-label">Time elapsed</p>
-              <p
-                class="stat-value"
-                id="percent-value"
-                data-testid="percent-value"
-              >
-                0.00%
-              </p>
-              <div class="progress" aria-hidden="true">
-                <div
-                  class="progress-fill"
-                  id="progress-fill"
-                  data-testid="progress-fill"
-                ></div>
-              </div>
-              <p class="stat-meta" id="stat-meta" data-testid="stat-meta">
-                From — to —
-              </p>
-            </div>
-
-            <blockquote class="quote" data-testid="daily-quote">
-              <p class="quote-text" id="quote-text">"—"</p>
-              <cite class="quote-author" id="quote-author">— Anonymous</cite>
-            </blockquote>
-          </aside>
+          <blockquote class="quote" data-testid="daily-quote">
+            <p class="quote-text" id="quote-text">"—"</p>
+            <cite class="quote-author" id="quote-author">— Anonymous</cite>
+          </blockquote>
         </div>
-
-        <footer class="bottom-bar">
-          <p class="hint">
-            <kbd>Click the gear</kbd> to change your dates. Persists across every new tab.
-          </p>
-        </footer>
       </section>
 
       <!-- Settings modal -->
