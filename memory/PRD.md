@@ -47,3 +47,10 @@
 1. Ship packaged `.crx` build (unlisted) via Chrome Web Store or offer signed download
 2. Add PNG icon set
 3. Life-expectancy preset flow
+
+## Update (2026-02-16, iteration 3)
+- Static gradient background (radial ember glow + linear dark) on both extension and landing
+- Bidirectional target-date ↔ days-from-today inputs in first-run AND settings
+- Ended-state UX: eyebrow becomes "What is the next goal to crush?", CTA button "Set the next goal" appears (opens settings), quote stays visible
+- Cleanup: deleted /app/frontend/src/{components,lib,hooks,constants,quotes.js} and /app/tests, /app/design_guidelines.json, /app/test_result.md. Frontend is now a minimal landing page that only serves the extension zip. Extension source lives exclusively in /app/extension/.
+- testing_agent_v3 iteration 3 → 100% pass on all 4 asks + regression
