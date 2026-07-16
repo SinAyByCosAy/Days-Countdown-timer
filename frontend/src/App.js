@@ -1,65 +1,59 @@
-import React, { useEffect, useState } from "react";
-import "@/App.css";
-import AmbientBackground from "@/components/AmbientBackground";
-import FirstRun from "@/components/FirstRun";
-import Dashboard from "@/components/Dashboard";
-import SettingsModal from "@/components/SettingsModal";
-import { storage, toISO } from "@/lib/countdown";
+import React from "react";
+import "@/index.css";
 
+// Landing page — this Emergent preview only serves the downloadable Chrome extension.
+// All extension source code lives in /app/extension/.
 export default function App() {
-  const [state, setState] = useState(null);
-  const [loaded, setLoaded] = useState(false);
-  const [settingsOpen, setSettingsOpen] = useState(false);
-
-  useEffect(() => {
-    const s = storage.get();
-    setState(s);
-    setLoaded(true);
-  }, []);
-
-  const save = ({ targetDate, startDate, label }) => {
-    const data = {
-      targetDate,
-      startDate: startDate || null,
-      setOn: (state && state.setOn) || toISO(new Date()),
-      label: label || "",
-    };
-    storage.set(data);
-    setState(data);
-    setSettingsOpen(false);
-  };
-
-  const reset = () => {
-    if (!window.confirm("Reset all settings and start over?")) return;
-    storage.clear();
-    setState(null);
-    setSettingsOpen(false);
-  };
-
   return (
-    <div className="app-shell" data-testid="app-root">
-      <AmbientBackground />
-      <main className="app">
-        {!loaded ? (
-          <div className="loading" data-testid="loading-state">
-            <span className="loading-dot" />
-          </div>
-        ) : state && state.targetDate ? (
-          <Dashboard
-            state={state}
-            onOpenSettings={() => setSettingsOpen(true)}
-          />
-        ) : (
-          <FirstRun onSave={save} />
-        )}
-      </main>
-      <SettingsModal
-        open={settingsOpen}
-        initial={state}
-        onClose={() => setSettingsOpen(false)}
-        onSave={save}
-        onReset={reset}
-      />
+    <div className="landing" data-testid="landing">
+      <div className="landing-inner">
+        <p className="tag">Chrome Extension · New Tab</p>
+        <h1 className="hero">
+          REMAINING <span className="accent">DAYS</span>
+        </h1>
+        <p className="sub">
+          A cinematic mortality-clock that replaces your new tab. Set a date.
+          Watch it burn. Make it count.
+        </p>
+
+        <a
+          className="btn"
+          href="/remaining-days-extension.zip"
+          download
+          data-testid="download-btn"
+        >
+          Download extension (.zip)
+        </a>
+
+        <ol className="steps">
+          <li>
+            <span className="step-num">01</span>
+            Download &amp; unzip the file.
+          </li>
+          <li>
+            <span className="step-num">02</span>
+            Open{" "}
+            <code>chrome://extensions</code> in Chrome.
+          </li>
+          <li>
+            <span className="step-num">03</span>
+            Toggle <b>Developer mode</b> on (top right).
+          </li>
+          <li>
+            <span className="step-num">04</span>
+            Click <b>Load unpacked</b> &amp; select the folder.
+          </li>
+          <li>
+            <span className="step-num">05</span>
+            Open a new tab. Set your date. Done.
+          </li>
+        </ol>
+
+        <p className="footer-note">
+          Source: <code>/app/extension/</code> — everything else in the repo is
+          just this download page.
+        </p>
+      </div>
     </div>
   );
 }

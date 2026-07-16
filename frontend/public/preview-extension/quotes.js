@@ -1,5 +1,6 @@
-// Rotating daily quotes — mirrored from the extension.
-export const QUOTES = [
+// Rotating daily quotes about time, mortality, and purpose.
+// Selected once per day (based on day-of-year) so the same quote persists all day.
+window.REMAINING_DAYS_QUOTES = [
   { text: "Pain is temporary. Quitting lasts forever.", author: "Lance Armstrong" },
   { text: "Hard work beats talent when talent doesn't work hard.", author: "Tim Notke" },
   { text: "The only easy day was yesterday.", author: "Navy SEALs" },
