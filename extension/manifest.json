@@ -1,0 +1,10 @@
+{
+  "manifest_version": 3,
+  "name": "Remaining Days — Mortality Clock New Tab",
+  "version": "1.0.0",
+  "description": "A cinematic new-tab countdown to any date you set. Watch time pass. Make it count.",
+  "chrome_url_overrides": {
+    "newtab": "newtab.html"
+  },
+  "permissions": ["storage"]
+}

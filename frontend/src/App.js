@@ -1,56 +1,65 @@
-import { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "@/App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import axios from "axios";
-import { HOME } from "@/constants/testIds";
+import AmbientBackground from "@/components/AmbientBackground";
+import FirstRun from "@/components/FirstRun";
+import Dashboard from "@/components/Dashboard";
+import SettingsModal from "@/components/SettingsModal";
+import { storage, toISO } from "@/lib/countdown";
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API = `${BACKEND_URL}/api`;
-
-const Home = () => {
-  const helloWorldApi = async () => {
-    try {
-      const response = await axios.get(`${API}/`);
-      console.log(response.data.message);
-    } catch (e) {
-      console.error(e, `errored out requesting / api`);
-    }
-  };
+export default function App() {
+  const [state, setState] = useState(null);
+  const [loaded, setLoaded] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   useEffect(() => {
-    helloWorldApi();
+    const s = storage.get();
+    setState(s);
+    setLoaded(true);
   }, []);
 
-  return (
-    <div>
-      <header className="App-header">
-        <a
-          data-testid={HOME.emergentLink}
-          className="App-link"
-          href="https://emergent.sh"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <img src="https://avatars.githubusercontent.com/in/1201222?s=120&u=2686cf91179bbafbc7a71bfbc43004cf9ae1acea&v=4" />
-        </a>
-        <p className="mt-5">Building something incredible ~!</p>
-      </header>
-    </div>
-  );
-};
+  const save = ({ targetDate, startDate, label }) => {
+    const data = {
+      targetDate,
+      startDate: startDate || null,
+      setOn: (state && state.setOn) || toISO(new Date()),
+      label: label || "",
+    };
+    storage.set(data);
+    setState(data);
+    setSettingsOpen(false);
+  };
 
-function App() {
+  const reset = () => {
+    if (!window.confirm("Reset all settings and start over?")) return;
+    storage.clear();
+    setState(null);
+    setSettingsOpen(false);
+  };
+
   return (
-    <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />}>
-            <Route index element={<Home />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+    <div className="app-shell" data-testid="app-root">
+      <AmbientBackground />
+      <main className="app">
+        {!loaded ? (
+          <div className="loading" data-testid="loading-state">
+            <span className="loading-dot" />
+          </div>
+        ) : state && state.targetDate ? (
+          <Dashboard
+            state={state}
+            onOpenSettings={() => setSettingsOpen(true)}
+          />
+        ) : (
+          <FirstRun onSave={save} />
+        )}
+      </main>
+      <SettingsModal
+        open={settingsOpen}
+        initial={state}
+        onClose={() => setSettingsOpen(false)}
+        onSave={save}
+        onReset={reset}
+      />
     </div>
   );
 }
-
-export default App;
